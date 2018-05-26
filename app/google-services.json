@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "346689346954",
+    "firebase_url": "https://test-f9cb0.firebaseio.com",
+    "project_id": "test-f9cb0",
+    "storage_bucket": "test-f9cb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346689346954:android:8f06b0480c9d78a8",
+        "android_client_info": {
+          "package_name": "com.bewtechnologies.writingprompts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346689346954-fs74u8r59vkodf0qvl0r3p9jt5b75urj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUGifY7D5NTcbCMU1v_YoSk6v7N5WcpDg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346689346954:android:a9eee86e68ac9dfe",
+        "android_client_info": {
+          "package_name": "com.bewtechnologies.writingpromptstwo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346689346954-iatk3lqkohv1uekg57g4nos8qdhm61np.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bewtechnologies.writingpromptstwo",
+            "certificate_hash": "b8f16de17feb39aed8ab6673f9b8a25a0d5212a7"
+          }
+        },
+        {
+          "client_id": "346689346954-fs74u8r59vkodf0qvl0r3p9jt5b75urj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUGifY7D5NTcbCMU1v_YoSk6v7N5WcpDg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346689346954-fs74u8r59vkodf0qvl0r3p9jt5b75urj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

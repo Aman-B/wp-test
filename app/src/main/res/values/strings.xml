@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Writing Prompts</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="card_title">Writing Prompt #%1$s</string>
+    <string name="firstlineprompt_card_title">First Line Prompt #%1$s</string>
+
+    <string name="cancel_dialog">"Never"</string>
+    <string name="no_dialog">Not now</string>
+    <string name="title_dialog">Rate this app, please! :)</string>
+    <string name="dialog_text">If you enjoy using this app, please take a moment to rate it. Thanks for your support!"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Firebase data node names-->
+    <string name="prompts_node_firebase">Prompts</string>
+    <string name="users_node_firebase">Users</string>
+    <string name="user_image_url_firebase">userImageURL</string>
+    <string name="emailTextHead">We are pleased to inform you that we have reviewed the prompts \\n\\n submitted by you :</string>
+</resources>
