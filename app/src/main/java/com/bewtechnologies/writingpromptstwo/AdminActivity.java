@@ -113,7 +113,7 @@ public class AdminActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(AdminActivity.this, "No next user left to go back to.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminActivity.this, "No next user left to go back to my man.", Toast.LENGTH_SHORT).show();
                 }
 
             }
