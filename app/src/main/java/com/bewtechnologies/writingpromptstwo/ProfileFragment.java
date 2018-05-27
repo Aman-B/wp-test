@@ -13,11 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -121,12 +118,16 @@ public class ProfileFragment extends Fragment {
         View rootView= inflater.inflate(R.layout.fragment_profile,container,false);
 
         profile_recyclerView= (RecyclerView) rootView.findViewById(R.id.profile_recycler_view);
+       /*
 
         View profile_detailsCard = (View) rootView.findViewById(R.layout.profile_details_top_card);
 
         final ImageView user_image = (ImageView) rootView.findViewById(R.id.userImage);
 
         final TextView user_name= (TextView) rootView.findViewById(R.id.userName);
+
+
+*/
 
         Button logoutBtn = rootView.findViewById(R.id.logout_btn);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +138,15 @@ public class ProfileFragment extends Fragment {
                 getActivity().finish();
             }
         });
+
+         rootView.findViewById(R.id.admin_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent adminactivity = new Intent(mContext,AdminActivity.class);
+                startActivity(adminactivity);
+            }
+        });
+
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -178,15 +188,15 @@ public class ProfileFragment extends Fragment {
 
 //                Toast.makeText(mContext,"Here here"+userFromFirebase.getUserName(), Toast.LENGTH_SHORT).show();
                 if (userFromFirebase != null) {
-                    userImageURL=userFromFirebase.getUserImageURL();
-                    Glide.with(mContext).load(userImageURL).into(user_image);
-                    userName=userFromFirebase.getUserName();
-                    user_name.setText(userName);
+                    //userImageURL=userFromFirebase.getUserImageURL();
+                   // Glide.with(mContext).load(userImageURL).into(user_image);
+                   // userName=userFromFirebase.getUserName();
+                    //user_name.setText(userName);
 
                 }
                 else
                 {
-                    user_name.setText("No name found. Login again.");
+                   // user_name.setText("No name found. Login again.");
                 }
 
                 DataSnapshot userPromptSnapshot= dataSnapshot.child("UserPrompts");
@@ -252,13 +262,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        rootView.findViewById(R.id.admin_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent adminactivity = new Intent(mContext,AdminActivity.class);
-                startActivity(adminactivity);
-            }
-        });
+
 
         return rootView;
     }

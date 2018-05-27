@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Created by ab on 08/04/18.
  */
 
-public class GeneralPromptAdapter extends RecyclerView.Adapter<GeneralPromptAdapter.ViewHolder>  {
+public class GeneralPromptAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
 
 // Provide a reference to the views for each data item
@@ -47,8 +47,11 @@ public class GeneralPromptAdapter extends RecyclerView.Adapter<GeneralPromptAdap
 
     private User mUser;
 
+    private static final int Head = 1;
+    private static final int List = 0;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+    public static class ViewHolderList extends RecyclerView.ViewHolder {
         private final ImageView card_userImage;
         private final TextView card_username;
         // each data item is just a string in this case
@@ -58,14 +61,39 @@ public class GeneralPromptAdapter extends RecyclerView.Adapter<GeneralPromptAdap
 
         public  TextView card_delete,card_share,card_date;
 
-        public ViewHolder(View v) {
+        public ViewHolderList(View v) {
             super(v);
             prompt_content = (TextView) v.findViewById(R.id.prompt);
-            card_userImage = (ImageView) v.findViewById(R.id.userImage);
-            card_username=(TextView) v.findViewById(R.id.user_name);
+            card_userImage = (ImageView) v.findViewById(R.id.userImage); //userimage with the prompt which is on top left;
+            card_username=(TextView) v.findViewById(R.id.user_name);     //username also on top left;
             card_share=(TextView) v.findViewById(R.id.share);
             card_delete=v.findViewById(R.id.delete);
             card_date=v.findViewById(R.id.date_tv);
+
+
+        }
+    }
+
+    public static class ViewHolderHead extends RecyclerView.ViewHolder {
+
+        private  TextView profileName;
+        // each data item is just a string in this case
+        public TextView prompt_content;
+        public TextView card_content;
+
+        public ImageView profileImage;
+
+        public  TextView card_delete,card_share,card_date;
+
+        public ViewHolderHead(View v) {
+            super(v);
+
+
+            /*View profile_detailsCard = (View) v.findViewById(R.layout.profile_details_top_card);*/
+
+             profileImage = (ImageView) v.findViewById(R.id.userImage);
+
+             profileName= (TextView) v.findViewById(R.id.userName);
 
 
         }
@@ -108,18 +136,35 @@ public class GeneralPromptAdapter extends RecyclerView.Adapter<GeneralPromptAdap
 
     // Create new views (invoked by the layout manager)
     @Override
-    public GeneralPromptAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                               int viewType) {
         // create a new view
 
 
+            View v =null;
 
-            View v=
-                    LayoutInflater.from(parent.getContext()).inflate(R.layout.userprompts_card_view,parent,false);        // set the view's size, margins, paddings and layout parameters
+            if(isProfileOrOtherProfile())
+            {
+                switch (viewType)
+                {
+                    case Head:
+                        return new ViewHolderHead(LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_head_card_view,parent,false));
 
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
+                    case List:
+                        return  new ViewHolderList(LayoutInflater.from(parent.getContext()).inflate(R.layout.userprompts_card_view,parent,false));
 
+                }
+
+            }
+
+                return new ViewHolderList(LayoutInflater.from(parent.getContext()).inflate(R.layout.userprompts_card_view,parent,false));
+
+
+            /*View v=
+                    LayoutInflater.from(parent.getContext()).inflate(R.layout.userprompts_card_view,parent,false); */       // set the view's size, margins, paddings and layout parameters
+
+           /* ViewHolder vh = new ViewHolder(v);
+            return vh;*/
 
 
 
@@ -128,7 +173,7 @@ public class GeneralPromptAdapter extends RecyclerView.Adapter<GeneralPromptAdap
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         final DBHelper mDBHelper = new DBHelper(mContext);
         final SQLiteDatabase mSqLiteDatabase= mDBHelper.getWritableDatabase();
@@ -142,89 +187,115 @@ public class GeneralPromptAdapter extends RecyclerView.Adapter<GeneralPromptAdap
 
         if(isProfile)
         {
+            if(getItemViewType(position)==Head)
+            {
+                ViewHolderHead viewHolderHead= (ViewHolderHead) holder;
 
-            // - get element from your dataset at this position
-            // - replace the contents of the view with that element
-            Toast.makeText(mContext, "size "+mUserPromptsArrayList.size(), Toast.LENGTH_SHORT).show();
-            Log.i("profile", "getItemCount: "+mUserPromptsArrayList.size());
-            final UserPrompts userPrompt= mUserPromptsArrayList.get(position);
-            holder.prompt_content.setText(userPrompt.getUserPrompt());
-            holder.card_userImage.setVisibility(View.INVISIBLE);
+                Glide.with(mContext).load(mUser.getUserImageURL()).into(viewHolderHead.profileImage);
+                viewHolderHead.profileName.setText(mUser.getUserName());
 
-            holder.card_username.setVisibility(View.INVISIBLE);
-            holder.card_date.setText(userPrompt.getTimeDifference(userPrompt));
+            }
 
-            final String userPromptKey = userPromptKeys.get(position);
+            else {
+                // - get element from your dataset at this position
+                // - replace the contents of the view with that element
 
-            holder.card_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.i("general ", "onBindViewHolder: "+userPromptKeys.get(position));
+                final int newPostion =position-1;
+                ViewHolderList viewHolderList = (ViewHolderList) holder;
+                Toast.makeText(mContext, "size "+mUserPromptsArrayList.size(), Toast.LENGTH_SHORT).show();
+                Log.i("profile", "getItemCount: "+mUserPromptsArrayList.size());
+                final UserPrompts userPrompt= mUserPromptsArrayList.get(newPostion);
+                viewHolderList.prompt_content.setText(userPrompt.getUserPrompt());
+                viewHolderList.card_userImage.setVisibility(View.INVISIBLE);
 
-                    AlertDialog rejectAlertDialog = createDialog(mUser, userPromptKey,position);
-                    rejectAlertDialog.show();
+                viewHolderList.card_username.setVisibility(View.INVISIBLE);
+                viewHolderList.card_date.setText(userPrompt.getTimeDifference(userPrompt));
 
-                }
-            });
+                final String userPromptKey = userPromptKeys.get(newPostion);
 
-            holder.card_share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                viewHolderList.card_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("general ", "onBindViewHolder: "+userPromptKeys.get(newPostion));
 
-                    String textToShare = "See this amazing writing prompt : \n\n\""+userPrompt.getUserPrompt()+"\" \n \nShared via app: WritingPrompts \n(Download here: https://goo.gl/yojsHx )";
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"Writing Prompt!");
-                    sendIntent.putExtra(Intent.EXTRA_TEXT,textToShare);
-                    sendIntent.setType("text/html");
-                    mContext.startActivity(Intent.createChooser(sendIntent,"Share the prompt!"));
-                }
-            });
+                        AlertDialog rejectAlertDialog = createDialog(mUser, userPromptKey,newPostion);
+                        rejectAlertDialog.show();
+
+                    }
+                });
+
+                viewHolderList.card_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String textToShare = "See this amazing writing prompt : \n\n\""+userPrompt.getUserPrompt()+"\" \n \nShared via app: WritingPrompts \n(Download here: https://goo.gl/yojsHx )";
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT,"Writing Prompt!");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT,textToShare);
+                        sendIntent.setType("text/html");
+                        mContext.startActivity(Intent.createChooser(sendIntent,"Share the prompt!"));
+                    }
+                });
+            }
+
         }
 
         else if(isOtherProfile)
         {
-            // Toast.makeText(mContext, "Here in others", Toast.LENGTH_SHORT).show();
-            // - get element from your dataset at this position
-            // - replace the contents of the view with that element
-            final UserPrompts userPrompt= mUserPromptsArrayList.get(position);
-            holder.prompt_content.setText(userPrompt.getUserPrompt());
-            holder.card_userImage.setVisibility(View.INVISIBLE);
+            if(getItemViewType(position)==Head)
+            {
+                ViewHolderHead viewHolderHead= (ViewHolderHead) holder;
 
-            holder.card_username.setVisibility(View.INVISIBLE);
-            holder.card_date.setText(userPrompt.getTimeDifference(userPrompt));
+                Glide.with(mContext).load(mUser.getUserImageURL()).into(viewHolderHead.profileImage);
+                viewHolderHead.profileName.setText(mUser.getUserName());
 
-            holder.card_delete.setVisibility(View.INVISIBLE);
+            }
 
-            holder.card_share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            else {
+                // Toast.makeText(mContext, "Here in others", Toast.LENGTH_SHORT).show();
+                // - get element from your dataset at this position
+                // - replace the contents of the view with that element
+                ViewHolderList viewHolderList = (ViewHolderList) holder;
+                final UserPrompts userPrompt = mUserPromptsArrayList.get(position-1); //head is first one now, so removing 1 from position.
+                viewHolderList.prompt_content.setText(userPrompt.getUserPrompt());
+                viewHolderList.card_userImage.setVisibility(View.INVISIBLE);
 
-                    String textToShare = "See this amazing writing prompt : \n\n\""+userPrompt.getUserPrompt()+"\" \n \nShared via app: WritingPrompts \n(Download here: https://goo.gl/yojsHx )";
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT,"Writing Prompt!");
-                    sendIntent.putExtra(Intent.EXTRA_TEXT,textToShare);
-                    sendIntent.setType("text/html");
-                    mContext.startActivity(Intent.createChooser(sendIntent,"Share the prompt!"));
-                }
-            });
+                viewHolderList.card_username.setVisibility(View.INVISIBLE);
+                viewHolderList.card_date.setText(userPrompt.getTimeDifference(userPrompt));
+
+                viewHolderList.card_delete.setVisibility(View.INVISIBLE);
+
+                viewHolderList.card_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String textToShare = "See this amazing writing prompt : \n\n\"" + userPrompt.getUserPrompt() + "\" \n \nShared via app: WritingPrompts \n(Download here: https://goo.gl/yojsHx )";
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Writing Prompt!");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
+                        sendIntent.setType("text/html");
+                        mContext.startActivity(Intent.createChooser(sendIntent, "Share the prompt!"));
+                    }
+                });
+            }
         }
         else
         {
             //showing feed prompts
-
+            ViewHolderList viewHolderList = (ViewHolderList) holder;
             final UserPrompts userPrompt = mUserPromptsArrayList.get(position);
-            holder.card_delete.setVisibility(View.INVISIBLE);
+            viewHolderList.card_delete.setVisibility(View.INVISIBLE);
 
-            holder.prompt_content.setText(userPrompt.getUserPrompt());
+            viewHolderList.prompt_content.setText(userPrompt.getUserPrompt());
 
             SpannableString content = new SpannableString(userPrompt.getUserName());
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 
-            holder.card_username.setText(content);
+            viewHolderList.card_username.setText(content);
 
-            holder.card_username.setOnClickListener(new View.OnClickListener() {
+            viewHolderList.card_username.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(mContext,PromptsBySpecificUserActivity.class);
@@ -234,10 +305,10 @@ public class GeneralPromptAdapter extends RecyclerView.Adapter<GeneralPromptAdap
                 }
             });
 
-            Glide.with(mContext).load(userPrompt.getUserImageURL()).into(holder.card_userImage);
+            Glide.with(mContext).load(userPrompt.getUserImageURL()).into(viewHolderList.card_userImage);
 
-            holder.card_date.setText(userPrompt.getTimeDifference(userPrompt));
-            holder.card_share.setOnClickListener(new View.OnClickListener() {
+            viewHolderList.card_date.setText(userPrompt.getTimeDifference(userPrompt));
+            viewHolderList.card_share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -329,10 +400,10 @@ public class GeneralPromptAdapter extends RecyclerView.Adapter<GeneralPromptAdap
     @Override
     public int getItemCount() {
 //        Log.i("tag", "getItemCount: "+mDataset.size());
-         if(isProfile)
+         if(isProfileOrOtherProfile())
          {
 
-             return mUserPromptsArrayList.size();
+             return mUserPromptsArrayList.size()+1;
          }
          else
          {
@@ -350,10 +421,16 @@ public class GeneralPromptAdapter extends RecyclerView.Adapter<GeneralPromptAdap
     @Override
     public int getItemViewType(int position) {
 
-            return position;
-
+        if(isProfileOrOtherProfile())
+          return (position == 0? Head : List);
+        else
+          return  position;
     }
 
+    public  boolean isProfileOrOtherProfile()
+    {
+        return isProfile||isOtherProfile;
+    }
 
 
 }

@@ -509,6 +509,8 @@ public class AdminActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             try {
+
+                //TODO : enter credentials here for testing but remove before submitting to github
                 SendGrid sendgrid = new SendGrid("", "");
 
                 SendGrid.Email email = new SendGrid.Email();
