@@ -509,7 +509,7 @@ public class AdminActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             try {
-                SendGrid sendgrid = new SendGrid("amanb20", "itsagain123");
+                SendGrid sendgrid = new SendGrid("", "");
 
                 SendGrid.Email email = new SendGrid.Email();
 
